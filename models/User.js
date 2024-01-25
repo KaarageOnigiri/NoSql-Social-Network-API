@@ -12,7 +12,6 @@ const userSchema = new Schema(
             type: String,
             unique: true,
             required: true,
-            // **** Need to test this out
             trim: true
         },
         email: {
@@ -29,18 +28,17 @@ const userSchema = new Schema(
         ],
         friends: [
             {
-                // maybe we don't need this IDK
                 type: Schema.Types.ObjectId,
-                // **** need help with self-referencing
+                // I don't know if this will work yet
+                ref: 'user'
             }
         ]
     },
     {
-        // **** Don't know if this is right
         toJSON: {
-            virtuals: true,
-            getters: true
+            virtuals: true
         },
+        // don't show the _id
         id: false
     }
 )

@@ -11,8 +11,8 @@ const thoughtSchema = new Schema(
         },
         createdAt: {
             type: Date,
-            default: Date.now
-            // **** how do I getter this
+            default: Date.now,
+            get: time => new Date(time).toLocaleString
         },
         // **** maybe can connect this one to User (not specified in the challenge README)
         username: {
