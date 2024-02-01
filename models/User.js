@@ -37,7 +37,7 @@ const userSchema = new Schema(
         toJSON: {
             virtuals: true
         },
-        // don't show the _id
+        // makes it so it doesn't show the _id
         id: false
     }
 )

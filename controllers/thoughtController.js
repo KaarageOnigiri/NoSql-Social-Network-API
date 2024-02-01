@@ -18,13 +18,14 @@ module.exports = {
         try {
             const thought = await Thought.findOne({ _id: req.params.thoughtId }).select('-__v');
 
-            if (!user) {
+            if (!thought) {
                 return res.status(404).json({ message: 'No thought with that ID' });
             }
 
             res.json(thought);
         }
         catch (err) {
+            console.log(err);
             return res.status(500).json(err);
         }
     },
@@ -35,7 +36,7 @@ module.exports = {
             
             const user = await User.findOneAndUpdate(
                 { _id: req.body.userId },
-                { $addToSet: { thoughts: thought._id } },
+                { $addToSet: { thoughts: thought.id } },
                 { new: true }
             );
 
@@ -46,6 +47,7 @@ module.exports = {
             res.json('Created the thought');
         }
         catch (err) {
+            console.log(err);
             return res.status(500).json(err);
         }
     },
@@ -72,7 +74,7 @@ module.exports = {
     // delete a thought
     async deleteThought(req, res) {
         try {
-            const thought = await Thought.findOneAndRemove({ _id:req.params.thoughtId });
+            const thought = await Thought.findOneAndDelete({ _id:req.params.thoughtId });
 
             if (!thought) {
                 return res.status(404).json({ message: 'No thought with this id!' });
@@ -84,13 +86,14 @@ module.exports = {
                 { new: true }
             )
 
-            if (!user) {
-                return res.status(404).json({ message: 'No user with this id!' });
+            if (!thought) {
+                return res.status(404).json({ message: 'No thought with this id!' });
             }
 
             res.json({ message: 'Thought successfully deleted!' })
         }
         catch (err) {
+            console.log(err)
             return res.status(500).json(err);
         }
     },
@@ -118,7 +121,7 @@ module.exports = {
         try {
             const thought = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
-                { $pull: { reactions: { reactionId: req.body.reactionId } } },
+                { $pull: { reactions: { _id: req.body.reactionId } } },
                 { runValidators: true, new: true }
             )
 
@@ -126,10 +129,6 @@ module.exports = {
                 return res.status(404).json({ message: 'No thought with this id!' });
             }
 
-            // need further testing
-            if (!req.body.reactionId) {
-                return res.status(404).json({ message: 'No reaction with this id!' });
-            }
 
             res.json(thought);
         }

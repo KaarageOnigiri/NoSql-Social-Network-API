@@ -139,6 +139,8 @@ module.exports = {
             if (!friend) {
                 res.status(404).json({ message: 'The user you are trying to unfriend does not exist' });
             }
+
+            res.json(user);
         }
         catch (err) {
             res.status(500).json(err);
